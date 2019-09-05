@@ -1,4 +1,4 @@
-## Interface: 11200
+## Interface: 11302
 ## Title: Gypsy_UnitBars
 ## Notes: Player, target, and party mods.
 ## Author: D.Beumer, D.Thompson, http://gypsymod.the-mad.net
