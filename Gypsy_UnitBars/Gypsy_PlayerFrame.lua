@@ -28,28 +28,30 @@ Gypsy_DefaultColorPlayerHealthBar = 1;
 
 -- ** PLAYER FRAME FUNCTIONS ** --
 
-function Gypsy_PlayerFrameOnLoad ()
+function Gypsy_PlayerFrameOnLoad (self)
+	print("Gypsy_PlayerFrameOnLoad");
 	-- Health and mana registrations
-	this:RegisterEvent("UNIT_HEALTH");
-	this:RegisterEvent("UNIT_MANA");
-	this:RegisterEvent("UNIT_RAGE");
-	this:RegisterEvent("UNIT_FOCUS");
-	this:RegisterEvent("UNIT_ENERGY");
+	self:RegisterEvent("UNIT_HEALTH");
+	self:RegisterEvent("UNIT_MANA");
+	self:RegisterEvent("UNIT_RAGE");
+	self:RegisterEvent("UNIT_FOCUS");
+	self:RegisterEvent("UNIT_ENERGY");
 	-- If a druid shapeshifts, the bar changes from rage/mana/energy/etc
-	this:RegisterEvent("UPDATE_SHAPESHIFT_FORMS");
+	self:RegisterEvent("UPDATE_SHAPESHIFT_FORMS");
 	-- Experience registrations
-	this:RegisterEvent("PLAYER_XP_UPDATE");
-	this:RegisterEvent("UPDATE_EXHAUSTION");
-	this:RegisterEvent("PLAYER_LEVEL_UP");
+	self:RegisterEvent("PLAYER_XP_UPDATE");
+	self:RegisterEvent("UPDATE_EXHAUSTION");
+	self:RegisterEvent("PLAYER_LEVEL_UP");
 	-- Register for variable loading to run our configuration registrations
-	this:RegisterEvent("PLAYER_ENTERING_WORLD");
-	this:RegisterEvent("VARIABLES_LOADED");
+	self:RegisterEvent("PLAYER_ENTERING_WORLD");
+	self:RegisterEvent("VARIABLES_LOADED");
 	-- Combat events for coloring the player name
-	this:RegisterEvent("PLAYER_ENTER_COMBAT");
-	this:RegisterEvent("PLAYER_LEAVE_COMBAT");
+	self:RegisterEvent("PLAYER_ENTER_COMBAT");
+	self:RegisterEvent("PLAYER_LEAVE_COMBAT");
 end
 
 function Gypsy_PlayerFrameOnEvent (event)
+	print("Gypsy_PlayerFrameOnEvent: event="..event);
 	if ( event == "PLAYER_ENTERING_WORLD" ) then
 		-- We need to do an initial display of	all our values when the player first logs in.
 		Gypsy_ShowPlayerHealth();
@@ -171,22 +173,22 @@ end
 
 -- ** EXPERIENCE BAR FUNCTIONS ** --
 
-function Gypsy_PlayerFrameExpBarOnLoad ()
+function Gypsy_PlayerFrameExpBarOnLoad (self)
 	-- Experience bar registrations
-	this:RegisterEvent("PLAYER_XP_UPDATE");
-	this:RegisterEvent("PLAYER_LEVEL_UP");
-	this:RegisterEvent("PLAYER_ENTERING_WORLD");
+	self:RegisterEvent("PLAYER_XP_UPDATE");
+	self:RegisterEvent("PLAYER_LEVEL_UP");
+	self:RegisterEvent("PLAYER_ENTERING_WORLD");
 	-- Can not be any higher, should not be lower
-	this:SetFrameLevel(0);
+	self:SetFrameLevel(0);
 end
 
-function Gypsy_PlayerFrameExpBarOnEvent (event)
+function Gypsy_PlayerFrameExpBarOnEvent (self, event)
 	-- Setup our experience bar when the player logs in, when experience changes, or when the player levels up
 	if (event == "PLAYER_XP_UPDATE" or event == "PLAYER_LEVEL_UP" or event == "PLAYER_ENTERING_WORLD") then
 		local currXP = UnitXP("player");
 		local nextXP = UnitXPMax("player");
-		this:SetMinMaxValues(min(0, currXP), nextXP);
-		this:SetValue(currXP);
+		self:SetMinMaxValues(min(0, currXP), nextXP);
+		self:SetValue(currXP);
 		return;
 	end
 end
@@ -194,8 +196,8 @@ end
 -- ** CLICK CATCH FUNCTIONS ** --
 
 -- Function to register for clicks for the click catcher when it loads
-function Gypsy_PlayerFrameClickCatchOnLoad ()
-	this:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+function Gypsy_PlayerFrameClickCatchOnLoad (self)
+	self:RegisterForClicks("LeftButtonUp", "RightButtonUp");
 end
 
 -- Function pulled from PlayerFrame.lua to handle clicks in our AddOn
@@ -243,6 +245,7 @@ function Gypsy_ShowPlayerHealth()
 			Gypsy_PlayerHealthText:SetText(health);
 		end
 	end]]
+	print("player hp: "..UnitHealth("player").." / ".. UnitHealthMax("player"));
 	if (UnitHealth("player") and UnitHealthMax("player")) then
 		Gypsy_PlayerHealthText:SetText(UnitHealth("player").." / "..UnitHealthMax("player"));
 	end
@@ -424,6 +427,7 @@ function Gypsy_ShowPlayerMana()
 			end
 		end
 	end]]
+	print("player hp: "..UnitHealth("player").." / ".. UnitHealthMax("player"));
 	if (UnitMana("player") and UnitManaMax("player") and UnitPowerType("player")) then
 		Gypsy_PlayerManaText:SetText(UnitMana("player").." / "..UnitManaMax("player"));
 		local type = UnitPowerType("player");

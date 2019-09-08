@@ -27,7 +27,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		<Scripts>
 			<OnLoad>
 				<!-- Moving default player frame, registering for events -->
-				Gypsy_PlayerFrameOnLoad();
+				Gypsy_PlayerFrameOnLoad(self);
 			</OnLoad>
 			<OnEvent>
 				<!-- Updating display values and moving target frame if pet frame is visible -->
@@ -152,10 +152,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 						</Anchors>
 						<Scripts>
 							<OnLoad>
-								Gypsy_PlayerFrameExpBarOnLoad();
+								Gypsy_PlayerFrameExpBarOnLoad(self);
 							</OnLoad>
 							<OnEvent>
-								Gypsy_PlayerFrameExpBarOnEvent(event);
+								Gypsy_PlayerFrameExpBarOnEvent(self, event);
 							</OnEvent>
 						</Scripts>
 						<BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
@@ -164,7 +164,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 							<Frame name="Gypsy_PlayerFrameExpBarBackground">
 								<Scripts>
 									<OnLoad>
-										this:SetFrameLevel(0);
+										self:SetFrameLevel(0);
 									</OnLoad>
 								</Scripts>
 								<Layers>
@@ -214,7 +214,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				<Scripts>
 					<OnLoad>
 						<!-- Register for clicks -->
-						Gypsy_PlayerFrameClickCatchOnLoad();
+						Gypsy_PlayerFrameClickCatchOnLoad(self);
 					</OnLoad>
 					<OnClick>
 						<!-- Handle clicks in the same way as the default window -->
@@ -235,10 +235,10 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 				</Anchors>
 				<Scripts>
 					<OnLoad>
-						this:SetFrameLevel("10");
+						self:SetFrameLevel("10");
 					</OnLoad>
 					<OnEnter>
-						GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT"); <!-- maybe no 'self' ? -->
 						GameTooltip:SetText(GYPSY_TEXT_UNITBARS_RESTEDTIP, 1.0, 1.0, 1.0);
 					</OnEnter>
 					<OnLeave>

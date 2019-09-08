@@ -39,7 +39,7 @@ C:\Projects\WoW\Bin\Interface\FrameXML\UI.xsd">
 		</Anchors>
 		<Scripts>
 			<OnLoad>
-				Gypsy_PlayerFrameCapsuleOnLoad();
+				Gypsy_PlayerFrameCapsuleOnLoad(self);
 			</OnLoad>
 			<OnEvent>
 				Gypsy_PlayerFrameCapsuleOnEvent(event);

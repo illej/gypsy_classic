@@ -14,7 +14,7 @@ Gypsy_DefaultLockPartyFrameCapsule = 0;
 -- Group unit frames by default
 Gypsy_DefaultGroupUnitFrames = 1;
 -- Invert unit frames by default
-Gypsy_DefaultInvertUnitFrames = 1;
+Gypsy_DefaultInvertUnitFrames = 0; -- 1;
 
 -- Default GypsyMod positions for each frame when it's inverted
 Gypsy_InvertCapsulePositions = {};
@@ -41,15 +41,27 @@ Gypsy_DefaultPlayerCapsuleTop = 1199.999058247
 -- Pet offset distance
 Gypsy_PetOffset = 30;
 
+function EHSA_ErrorWithStack(msg)
+	msg = "EHSA: "..msg.."\n"..debugstack()
+	_ERRORMESSAGE(msg)
+ end
+ 
 -- ** CAPSULE FRAME INITIALIZATION FUNCTIONS ** --
 
-function Gypsy_PlayerFrameCapsuleOnLoad ()
+function Gypsy_PlayerFrameCapsuleOnLoad (self)
+	print("HELLO");
+
+	-- setup error handler
+	seterrorhandler(EHSA_ErrorWithStack);
+
 	-- Required registrations, other capsules don't do this
-	this:RegisterEvent("VARIABLES_LOADED");
-	this:RegisterEvent("PLAYER_PET_CHANGED");
+	self:RegisterEvent("VARIABLES_LOADED");
+	self:RegisterEvent("PLAYER_PET_CHANGED");
 end
 
 function Gypsy_PlayerFrameCapsuleOnEvent (event)
+	print("EVENT: "..event);
+
 	-- Check for pet summon/dismiss, and update our frames
 	if (event == "PLAYER_PET_CHANGED") then
 		Gypsy_UpdateUnitFrames();
@@ -138,6 +150,7 @@ function Gypsy_PlayerFrameCapsuleOnEvent (event)
 end
 
 function Gypsy_PlayerFrameCapsuleArtOnShow ()
+	print("ART_ON_SHOW");
 	-- Make sure things are anchored for grouping if they need to be when we attempt to move
 	Gypsy_UpdateUnitFrames(0);
 end
@@ -145,6 +158,7 @@ end
 -- ** CAPSULE ART DISPLAY FUNCTIONS ** --
 
 function Gypsy_UnitBarOnUpdate ()
+	print("Gypsy_UnitBarOnUpdate");
 	-- Check whether the mouse is over the player frame capsule to show or hide it
 	Gypsy_TogglePlayerFrameCapsule();
 	-- Temporary fix for conflicting default chat frame position
@@ -155,6 +169,7 @@ function Gypsy_UnitBarOnUpdate ()
 end
 
 function Gypsy_TogglePlayerFrameCapsule ()
+	print("Gypsy_TogglePlayerFrameCapsule");
 	-- If Shell is present, update the local lock setting
 	if (GYPSY_SHELL ~= nil) then
 		Gypsy_LockPlayerFrameCapsule = GYPSY_LOCKALL;
@@ -279,7 +294,8 @@ end
 	No other possibilities should result in anything happening.
 ]]
 
-function Gypsy_UpdateUnitFrames (reset, load) 	
+function Gypsy_UpdateUnitFrames (reset, load)
+	print("reset="..reset..", load="..load); 	
 	if (Gypsy_RetrieveOption ~= nil) then
 		-- Update our local variables with updated settings from GypsyMod if applicable	
 		--if (Gypsy_RetrieveOption(204) ~= nil) then
@@ -485,6 +501,7 @@ end
 ]]
 
 function Gypsy_UnitUpdatePartyFrame (id)
+	print("id="..id);
 	-- Check to be sure an ID was supplied
 	if (id == nil) then
 		return nil;
